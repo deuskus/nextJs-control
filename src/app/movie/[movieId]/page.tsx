@@ -6,12 +6,14 @@ import {useEffect, useState} from "react";
 import {MovieInfo} from "@/components/movie-info/MovieInfo";
 import {movieService} from "@/services/movie.service";
 import {IMovie} from "@/models/IMovie";
+import React from "react";
 
-export default function MoviePage({ params }: { params: { movieId: string } }) {
+export default function MoviePage({ params }: { params: Promise<{ movieId: string }> }) {
+    const { movieId } = React.use(params);
     const [movie, setMovie] = useState<IMovie | null>(null);
     useEffect(() => {
-        movieService.getMovieById && movieService.getMovieById(params.movieId).then(setMovie);
-    }, [params.movieId]);
+        movieService.getMovieById && movieService.getMovieById(movieId).then(setMovie);
+    }, [movieId]);
     if (!movie) return (
         <Provider store={store}>
             <InitUserSessionWrapper>
